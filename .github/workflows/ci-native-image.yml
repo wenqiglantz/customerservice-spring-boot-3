@@ -1,0 +1,46 @@
+name: CI Native Image workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow against'
+        type: environment
+        required: true
+
+jobs:
+
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.env || 'dev' }}
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@248ae51c2e8cc9622ecf50685c8bf7150c6e8813
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - name: Checkout Code
+        uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
+
+      - uses: graalvm/setup-graalvm@01b9840538b867061986ea406d1b79c91a701d17
+        with:
+          version: 'dev' # change to 'latest' later
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+
+      - name: Print debug info
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          gu --version
+          native-image --version
+
+      - name: Build Native Image
+        run: |
+          mvn clean -Pnative native:compile -Dmaven.test.skip -e -X

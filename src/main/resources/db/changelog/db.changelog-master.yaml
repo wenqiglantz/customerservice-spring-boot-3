@@ -1,0 +1,51 @@
+#databaseChangeLog:
+#  - include:
+#      file: db/changelog/db.changelog-1.0.yaml
+
+databaseChangeLog:
+  - changeSet:
+      id: customer
+      author: wenqi.glantz
+      changes:
+        - createTable:
+            tableName: customer
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: customer_pkey
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0
+              - column:
+                  name: customer_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inserted_at
+                  type: timestamp(6)
+              - column:
+                  name: inserted_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: timestamp(6)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)

@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    environment: ${{ inputs.env || 'dev' }}
+    environment: ${{ github.event.inputs.environment || 'dev' }}
 
     steps:
       - name: Harden Runner
@@ -43,4 +43,4 @@ jobs:
 
       - name: Build Native Image
         run: |
-          mvn clean -Pnative native:compile -Dmaven.test.skip -e -X
+          mvn clean -Pnative native:compile -Dmaven.test.skip

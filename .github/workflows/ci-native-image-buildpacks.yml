@@ -14,6 +14,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
+
     environment: ${{ github.event.inputs.environment || 'dev' }}
 
     steps:

@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  build-and-deploy:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -47,6 +47,7 @@ jobs:
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
+          echo "AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION"
           java --version
           gu --version
           native-image --version

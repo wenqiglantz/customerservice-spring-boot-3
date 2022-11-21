@@ -7,6 +7,10 @@ on:
         description: 'Environment to run the workflow against'
         type: environment
         required: true
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
 
@@ -57,6 +61,16 @@ jobs:
         run: |
           echo project version is ${{ env.PROJECT_VERSION }}
 
+      - name: Scan ECR image with Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5
+        with:
+          image-ref: ${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Build, tag, and push image to AWS ECR
         id: build-image
         env:
@@ -70,13 +84,3 @@ jobs:
           docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-      - name: Scan ECR image with Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5
-        with:
-          image-ref: ${{ steps.build-image.outputs.image }}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'

@@ -52,7 +52,7 @@ jobs:
           java --version
 
       - name: Build with Maven and Buildpacks
-        run: mvn clean spring-boot:build-image -Dmaven.test.skip -Dspring-boot.build-image.imageName=${{ secrets.ECR_REPOSITORY_NAME }}:latest
+        run: mvn clean spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
       - name: Set project version as environment variable
         run: echo "PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
@@ -71,8 +71,7 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-      - name: Build, tag, and push image to AWS ECR
-        id: build-image
+      - name: Tag and push image to AWS ECR
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}

@@ -54,14 +54,22 @@ jobs:
 
       - name: Build Native Image with Buildpacks
         run: |
-          mvn clean -Pnative spring-boot:build-image -Dmaven.test.skip -Dspring-boot.build-image.imageName=${{ secrets.ECR_REPOSITORY_NAME }}:latest
-          #mvn clean -Pnative native:compile -Dmaven.test.skip 
+          mvn clean -Pnative spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
       - name: Set project version as environment variable
         run: echo "PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-      - name: Tag and push image to ECR
-        id: tag-push-image
+      - name: Scan ECR image with Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5
+        with:
+          image-ref: ${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Tag and push image to AWS ECR
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
@@ -72,15 +80,4 @@ jobs:
           aws ecr get-login-password --region $AWS_REGION | docker login -u AWS --password-stdin $ECR_REGISTRY
           docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        
-      - name: Scan ECR image with Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5
-        with:
-          image-ref: ${{ steps.tag-push-image.outputs.image }}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-          
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"          

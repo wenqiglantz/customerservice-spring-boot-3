@@ -60,7 +60,6 @@ public abstract class BaseEntity implements Serializable {
 
     @PrePersist
     private void onPrePersist() {
-        id = UUID.randomUUID();
         insertedAt = now();
         insertedBy = "System";
         updatedAt = insertedAt;

@@ -87,7 +87,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<imageName>customer-service</imageName>
+					<imageName>demo/${project.artifactId}:latest</imageName>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

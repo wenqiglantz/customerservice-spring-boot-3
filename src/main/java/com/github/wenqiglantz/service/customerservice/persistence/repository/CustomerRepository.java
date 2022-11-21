@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Transactional(readOnly = true)
-public interface CustomerRepository extends JpaRepository<Customer, String> {
-    Optional<Customer> findByCustomerId(String customerId);
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+    Optional<Customer> findById(UUID customerId);
 }

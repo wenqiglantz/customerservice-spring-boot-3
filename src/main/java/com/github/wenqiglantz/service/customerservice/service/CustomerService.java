@@ -22,9 +22,9 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public CustomerVO saveCustomer(CustomerVO customerVO) throws Exception {
-        customerVO.setCustomerId(Strings.isBlank(customerVO.getCustomerId()) ? UUID.randomUUID().toString() : customerVO.getCustomerId());
+        customerVO.setCustomerId(customerVO.getCustomerId() == null ? UUID.randomUUID() : customerVO.getCustomerId());
         Customer customer = Customer.builder()
-                .customerId(customerVO.getCustomerId())
+                .id(customerVO.getCustomerId())
                 .firstName(customerVO.getFirstName())
                 .lastName(customerVO.getLastName())
                 .build();
@@ -34,11 +34,11 @@ public class CustomerService {
 
     public CustomerVO getCustomer(String customerId) {
         Customer customer =
-                customerRepository.findByCustomerId(customerId).orElseThrow(() ->
+                customerRepository.findById(UUID.fromString(customerId)).orElseThrow(() ->
                         new NotFoundException("Could not find customer with customerId: " + customerId));
 
         CustomerVO customerVO = CustomerVO.builder()
-                .customerId(customerId)
+                .customerId(UUID.fromString(customerId))
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
                 .build();
@@ -50,7 +50,7 @@ public class CustomerService {
 
         List<CustomerVO> customerVOS = customers.stream()
                 .map(customer -> CustomerVO.builder()
-                        .customerId(customer.getCustomerId())
+                        .customerId(customer.getId())
                         .firstName(customer.getFirstName())
                         .lastName(customer.getLastName())
                         .build())
@@ -61,7 +61,7 @@ public class CustomerService {
 
     public void updateCustomer(String customerId, CustomerVO customerVO) throws Exception {
         Customer customer =
-                customerRepository.findByCustomerId(customerId).orElseThrow(() ->
+                customerRepository.findById(UUID.fromString(customerId)).orElseThrow(() ->
                         new NotFoundException("Could not find customer with customerId: " + customerId));
         customer.setFirstName(customerVO.getFirstName());
         customer.setLastName(customerVO.getLastName());
@@ -70,7 +70,7 @@ public class CustomerService {
 
     public void deleteCustomer(String customerId) throws Exception {
         Customer customer =
-                customerRepository.findByCustomerId(customerId).orElseThrow(() ->
+                customerRepository.findById(UUID.fromString(customerId)).orElseThrow(() ->
                         new NotFoundException("Could not find customer with customerId: " + customerId));
         customerRepository.delete(customer);
     }

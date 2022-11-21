@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: VARCHAR(36)
+                  type: uuid
                   constraints:
                     primaryKey: true
                     primaryKeyName: customer_pkey
@@ -18,11 +18,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   defaultValueNumeric: 0
-              - column:
-                  name: customer_id
-                  type: VARCHAR(36)
-                  constraints:
-                    nullable: false
               - column:
                   name: first_name
                   type: VARCHAR(50)

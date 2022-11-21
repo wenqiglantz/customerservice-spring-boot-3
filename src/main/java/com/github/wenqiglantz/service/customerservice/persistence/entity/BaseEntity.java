@@ -7,6 +7,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,11 +17,12 @@ import static java.time.LocalDateTime.now;
 
 @Getter
 @MappedSuperclass
+@SuperBuilder
 public abstract class BaseEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
-    private String id;
+    private UUID id;
 
     @Version
     @Column(name = "VERSION")
@@ -54,7 +56,7 @@ public abstract class BaseEntity implements Serializable {
 
     @PrePersist
     private void onPrePersist() {
-        id = UUID.randomUUID().toString();
+        id = UUID.randomUUID();
         insertedAt = now();
         insertedBy = "System";
         updatedAt = insertedAt;

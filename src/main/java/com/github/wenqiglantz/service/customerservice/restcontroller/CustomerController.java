@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -69,10 +70,8 @@ public class CustomerController {
             @ApiResponse(responseCode = "500", description = "Unexpected system exception")
     })*/
     @GetMapping(produces = JSON)
-    public ResponseEntity<Map> getCustomers() {
-        Map data = new HashMap();
-        data.put("data", customerService.getCustomers());
-        return ResponseEntity.ok(data);
+    public ResponseEntity<List<CustomerVO>> getCustomers() {
+        return ResponseEntity.ok(customerService.getCustomers());
     }
 
     /*@Operation(summary = "Retrieve the customer details given the customer Id")

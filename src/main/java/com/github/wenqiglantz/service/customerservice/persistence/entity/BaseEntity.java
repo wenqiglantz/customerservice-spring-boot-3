@@ -6,7 +6,9 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import static java.time.LocalDateTime.now;
 @Getter
 @MappedSuperclass
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class BaseEntity implements Serializable {
 
     @Id

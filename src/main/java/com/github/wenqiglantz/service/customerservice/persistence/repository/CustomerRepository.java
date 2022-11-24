@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Transactional(readOnly = true)
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
-    Optional<Customer> findById(UUID customerId);
+
 }

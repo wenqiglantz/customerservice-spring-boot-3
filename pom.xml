@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -45,7 +45,6 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<!--<version>4.16.1</version>-->
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -101,7 +100,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
@@ -136,6 +135,6 @@
 				<enabled>false</enabled>
 			</releases>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories>-->
 
 </project>

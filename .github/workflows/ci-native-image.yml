@@ -35,7 +35,7 @@ jobs:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-      - uses: graalvm/setup-graalvm@01b9840538b867061986ea406d1b79c91a701d17
+      - uses: graalvm/setup-graalvm@1478c743ed947e10f0af6ed9eea34f564dd5bf61
         with:
           version: 'latest'
           java-version: '17'
